@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "glob": "^11.0.0",
     "minimist": "^1.2.8",
     "uglify-js": "^3.19.3"
   }

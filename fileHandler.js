@@ -1,14 +1,21 @@
-const glob = require("glob");
+let {join} = require("path");
+let fs=require("fs");
+function recursiveList(dir){
+    if(fs.statSync(dir).isFile()) return dir;
+    return fs.readdirSync(dir).map(a=>recursiveList(join(dir,a))).flat()
+};
 
 function handleMove(mv,cwd){
-    let asterisk=mv[0].includes("*")+mv[1].includes("*");
+    let asterisk=mv[0].endsWith("*")+mv[1].includes("*");
     if(asterisk===1){
         throw new Error("An asterisk cannot be used on only 1 element.");
     } else if(asterisk==0){
         return [[mv[0],mv[1]]];
     } else if(asterisk==2){
         let fromTo=mv.map(a=>a.split("*"));
-        return glob.sync(mv[0].replaceAll("*","**"),{cwd}).filter(a=>a!==fromTo[0][0].slice(0,-1))
+        let list=recursiveList(join(cwd,fromTo[0][0]));
+        //console.log(mv,cwd,"->",list)
+        return list.filter(a=>a!==fromTo[0][0].slice(0,-1))
         .map(a=>[a,a.replace(fromTo[0][0],fromTo[1][0]).replace(fromTo[0][1],fromTo[1][1])])
     }
 }
