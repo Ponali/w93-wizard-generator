@@ -28,7 +28,7 @@ function handleMove(mv,cwd){
     if(asterisk===1){
         throw new Error("An asterisk cannot be used on only 1 element.");
     } else if(asterisk==0){
-        return [[mv[0],mv[1]]];
+        return [[join(cwd,mv[0]),mv[1]]];
     } else if(asterisk==2){
         let path=join(cwd,mv[0].split("*")[0]);
         let list=recursiveList(path);

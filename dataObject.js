@@ -9,7 +9,7 @@ function isDirectorySync(path) {
 let contentTable=[];
 
 function handleFile(file,projectFolder){
-    let checkPath=join(projectFolder,file[0]);
+    let checkPath=file[0];
     if(isDirectorySync(checkPath)){
         return {dir:1,path:file[1]};
     } else {
