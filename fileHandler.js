@@ -16,7 +16,7 @@ function joinVirtual2arg(pathA,pathB){
     if(out.endsWith("/")){
         out=out.slice(0,-1);
     }
-    return pathA+pathB;
+    return out;
 }
 
 function joinVirtual(...paths){
@@ -48,7 +48,7 @@ function handleConfig(config,cwd){
     for(let i in config){
         config[i]=handleVersion(config[i],cwd);
     };
-    //console.log(config);
+    console.log(config);
     return config;
 };
 
