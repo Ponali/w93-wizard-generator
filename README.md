@@ -35,4 +35,4 @@ defaultSettings.txt -> /c/myProgram/defaultSettings.txt
 ```
 
 The JSON and file content should always be seperated by three horizontal lines.
-Asterisks are converted to `**` and handled by glob.
+Asterisks are wildcards that go to any repository and file recursively.
