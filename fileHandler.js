@@ -5,6 +5,24 @@ function recursiveList(dir){
     return fs.readdirSync(dir).map(a=>recursiveList(join(dir,a))).flat()
 };
 
+function joinVirtual2arg(pathA,pathB){
+    if(!pathA.endsWith("/")){
+        pathA+="/";
+    }
+    if(pathB.startsWith("/")){
+        pathB=pathB.slice(1);
+    }
+    let out=pathA+pathB;
+    if(out.endsWith("/")){
+        out=out.slice(0,-1);
+    }
+    return pathA+pathB;
+}
+
+function joinVirtual(...paths){
+    return [...paths].reduce(joinVirtual2arg);
+}
+
 function handleMove(mv,cwd){
     let asterisk=mv[0].endsWith("*")+mv[1].includes("*");
     if(asterisk===1){
@@ -12,11 +30,10 @@ function handleMove(mv,cwd){
     } else if(asterisk==0){
         return [[mv[0],mv[1]]];
     } else if(asterisk==2){
-        let fromTo=mv.map(a=>a.split("*"));
-        let list=recursiveList(join(cwd,fromTo[0][0]));
+        let path=join(cwd,mv[0].split("*")[0]);
+        let list=recursiveList(path);
         //console.log(mv,cwd,"->",list)
-        return list.filter(a=>a!==fromTo[0][0].slice(0,-1))
-        .map(a=>[a,a.replace(fromTo[0][0],fromTo[1][0]).replace(fromTo[0][1],fromTo[1][1])])
+        return list.map(a=>[a,joinVirtual(mv[1].split("*")[0],a.replace(path,""),mv[1].split("*")[1])])
     }
 }
 
@@ -31,6 +48,7 @@ function handleConfig(config,cwd){
     for(let i in config){
         config[i]=handleVersion(config[i],cwd);
     };
+    //console.log(config);
     return config;
 };
 
